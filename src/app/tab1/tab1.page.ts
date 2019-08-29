@@ -10,14 +10,32 @@ import { Component, OnInit } from '@angular/core';
 export class Tab1Page implements OnInit {
 
   peliculasRecientes: Pelicula[] = [];
+  populares: Pelicula[] = [];
 
 
   constructor( private moviesService: MoviesService) {}
 
   ngOnInit() {
+    // Features
     this.moviesService.getFeatures()
+        .subscribe( resp => {
+          this.peliculasRecientes = resp.results;
+        });
+
+    // Popular
+    this.getPopulares();
+  }
+
+  cargarMas() {
+    this.getPopulares();
+  }
+
+  getPopulares() {
+    // Popular
+    this.moviesService.getPopular()
       .subscribe( resp => {
-        this.peliculasRecientes = resp.results;
+        const arrTemp = [...this.populares, ...resp.results]; // fix porque el pipe pares no es async
+        this.populares = arrTemp;
       });
   }
 

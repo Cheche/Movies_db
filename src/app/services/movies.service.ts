@@ -10,7 +10,10 @@ const apiKey = environment.apiKey;
 @Injectable({
   providedIn: 'root'
 })
+
 export class MoviesService {
+
+  private popularesPage = 0;
 
   constructor( private http: HttpClient) { }
 
@@ -41,4 +44,13 @@ export class MoviesService {
 
     return this.ejecutarQuery<RespuestaMDB>(`/discover/movie?primary_release_date.gte=${ ini }&primary_release_date.lte=${ fin }`);
   }
+
+
+  getPopular() {
+    this.popularesPage++;
+
+    const query = `/discover/movie?sort_by=popularity.desc&page=${this.popularesPage}`;
+    return this.ejecutarQuery<RespuestaMDB>( query );
+  }
+
 }
